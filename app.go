@@ -1,5 +1,20 @@
 package app
 
+import "time"
+
+type AvailableResources struct {
+	PaintVolume   float64
+	PaperVolume   float64
+	TextileVolume float64
+}
+
+type RequiredResources struct {
+	PaintVolume   float64
+	PaperVolume   float64
+	TextileVolume float64
+	SpentTime     time.Duration
+}
+
 type Order struct {
 	Id      int
 	Status  string
@@ -40,7 +55,7 @@ type Textile struct {
 type Printer struct {
 	Id         int     `db:"id"`
 	Status     string  `db:"status"`
-	Efficiency float64 `db:"efficiency"`
+	Efficiency float64 `db:"efficiency"` //производительность футболка/час
 	StartedAt  int64   `db:"started_at"`
 	ExpiredAt  int64   `db:"expired_at"`
 }

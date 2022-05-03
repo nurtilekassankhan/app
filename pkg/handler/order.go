@@ -2,6 +2,7 @@ package handler
 
 import (
 	"app"
+	"app/pkg/helper"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -17,14 +18,57 @@ func (h *Handler) createOrder(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	id, err := h.services.Order.CreateOrder(input)
+	//получаем данные о футболке
+	shirt, err := h.services.Shirt.GetShirtById(input.ShirtId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"id": id,
-	})
+	//todo: перенести на получение свободного принтера
+	printer, err := h.services.GetPrinterById(1)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	//вычисляем сколько ресурсов нужно для выполнения заказа
+	reqResources := helper.CalculateRequiredResources(input, shirt, printer)
+
+	//получаем актуальные данные о ресурсах
+	paint, err := h.services.GetPaintById(shirt.PaintId)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	paper, err := h.services.GetPaperById(shirt.PaperId)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	textile, err := h.services.GetTextileById(shirt.TextileId)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	//вычисляем сколько у нас есть ресурсов
+	availableResources := helper.GetAvailableResources(paint, paper, textile)
+
+	//смотрим, сможем ли мы исполнить заказ
+	if helper.IsOrderCanCompleted(reqResources, availableResources) {
+		//создаем ордер на выполнение заказа и возвращаем примерный срок выполнения
+		id, err := h.services.Order.CreateOrder(input) //todo: реализовать функцию для снятия объема ресурсов после выполнения ордера
+		if err != nil {
+			newErrorResponse(c, http.StatusInternalServerError, err.Error())
+			return
+		}
+		c.JSON(http.StatusOK, map[string]interface{}{
+			"id":            id,
+			"required_time": reqResources.SpentTime,
+		})
+	} else {
+		newErrorResponse(c, http.StatusInternalServerError, "insufficient resources to execute order") //todo: вынести ошибку в константу
+		return
+	}
 }
 
 func (h *Handler) getAllOrders(c *gin.Context) {
