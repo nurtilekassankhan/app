@@ -27,7 +27,38 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	textiles := router.Group("/textiles")
 	{
-		textiles.POST("/")
+		textiles.POST("/", h.createTextile)
+		textiles.GET("/", h.getAllTextiles)
+		textiles.POST("/:id", h.getTextileById)
+		textiles.PUT("/:id", h.updateTextile)
+		textiles.DELETE("/:id", h.deleteTextile)
+	}
+
+	papers := router.Group("/papers")
+	{
+		papers.POST("/", h.createPaper)
+		papers.GET("/", h.getAllPapers)
+		papers.POST("/:id", h.getPaperById)
+		papers.PUT("/:id", h.updatePaper)
+		papers.DELETE("/:id", h.deletePaper)
+	}
+
+	paints := router.Group("/paints")
+	{
+		paints.POST("/", h.createPaint)
+		paints.GET("/", h.getAllPaints)
+		paints.POST("/:id", h.getPaintById)
+		paints.PUT("/:id", h.updatePaint)
+		paints.DELETE("/:id", h.deletePaint)
+	}
+
+	shirts := router.Group("/shirts")
+	{
+		shirts.POST("/", h.createShirt)
+		shirts.GET("/", h.getAllShirts)
+		shirts.POST("/:id", h.getShirtById)
+		shirts.PUT("/:id", h.updateShirt)
+		shirts.DELETE("/:id", h.deleteShirt)
 	}
 	return router
 }

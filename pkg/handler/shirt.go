@@ -7,17 +7,17 @@ import (
 	"strconv"
 )
 
-type getAllTextilesResponse struct {
-	Data []app.Textile `json:"data"`
+type getAllShirtsResponse struct {
+	Data []app.Shirt `json:"data"`
 }
 
-func (h *Handler) createTextile(c *gin.Context) {
-	var input app.Textile
+func (h *Handler) createShirt(c *gin.Context) {
+	var input app.Shirt
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	id, err := h.services.Textile.CreateTextile(input)
+	id, err := h.services.Shirt.CreateShirt(input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -27,56 +27,56 @@ func (h *Handler) createTextile(c *gin.Context) {
 	})
 }
 
-func (h *Handler) getAllTextiles(c *gin.Context) {
-	textiles, err := h.services.Textile.GetAllTextiles()
+func (h *Handler) getAllShirts(c *gin.Context) {
+	shirts, err := h.services.Shirt.GetAllShirts()
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, getAllTextilesResponse{
-		Data: textiles,
+	c.JSON(http.StatusOK, getAllShirtsResponse{
+		Data: shirts,
 	})
 }
 
-func (h *Handler) getTextileById(c *gin.Context) {
+func (h *Handler) getShirtById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
 		return
 	}
-	textile, err := h.services.Textile.GetTextileById(id)
+	shirt, err := h.services.Shirt.GetShirtById(id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, textile)
+	c.JSON(http.StatusOK, shirt)
 }
 
-func (h *Handler) updateTextile(c *gin.Context) {
+func (h *Handler) updateShirt(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
 		return
 	}
-	var input app.Textile
+	var input app.Shirt
 	if err = c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	if err = h.services.Textile.UpdateTextile(id, input); err != nil {
+	if err = h.services.Shirt.UpdateShirt(id, input); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, statusResponse{"ok"})
 }
 
-func (h *Handler) deleteTextile(c *gin.Context) {
+func (h *Handler) deleteShirt(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
 		return
 	}
-	err = h.services.Textile.DeleteTextile(id)
+	err = h.services.Shirt.DeleteShirt(id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

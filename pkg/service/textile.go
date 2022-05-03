@@ -6,11 +6,11 @@ import (
 )
 
 type Textile interface {
-	CreateTextile() (int, error)
-	GetAllTextile() ([]app.Textile, error)
+	CreateTextile(textile app.Textile) (int, error)
+	GetAllTextiles() ([]app.Textile, error)
 	GetTextileById(id int) (app.Textile, error)
 	UpdateTextile(id int, textile app.Textile) error
-	DeletePrinter(id int) error
+	DeleteTextile(id int) error
 }
 
 type TextileService struct {
@@ -23,27 +23,22 @@ func NewTextileService(repo repository.Textile) *TextileService {
 	}
 }
 
-func (t *TextileService) CreateTextile() (int, error) {
-	//TODO implement me
-	panic("implement me")
+func (s *TextileService) CreateTextile(textile app.Textile) (int, error) {
+	return s.repo.CreateTextile(textile)
 }
 
-func (t *TextileService) GetAllTextile() ([]app.Textile, error) {
-	//TODO implement me
-	panic("implement me")
+func (s *TextileService) GetAllTextiles() ([]app.Textile, error) {
+	return s.repo.GetAllTextiles()
 }
 
-func (t *TextileService) GetTextileById(id int) (app.Textile, error) {
-	//TODO implement me
-	panic("implement me")
+func (s *TextileService) GetTextileById(id int) (app.Textile, error) {
+	return s.repo.GetTextileById(id)
 }
 
-func (t *TextileService) UpdateTextile(id int, textile app.Textile) error {
-	//TODO implement me
-	panic("implement me")
+func (s *TextileService) UpdateTextile(id int, textile app.Textile) error {
+	return s.repo.UpdateTextile(id, textile)
 }
 
-func (t *TextileService) DeletePrinter(id int) error {
-	//TODO implement me
-	panic("implement me")
+func (s *TextileService) DeleteTextile(id int) error {
+	return s.repo.DeleteTextile(id)
 }
