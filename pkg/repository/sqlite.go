@@ -6,6 +6,7 @@ import (
 )
 
 const (
+	ordersTable   = "orders"
 	shirtsTable   = "shirts"
 	paintsTable   = "paints"
 	papersTable   = "papers"

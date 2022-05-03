@@ -1,11 +1,21 @@
 package app
 
+type Order struct {
+	Id      int
+	Status  string
+	ShirtId int
+	Amount  float64
+}
+
 type Shirt struct {
-	Id        string
-	Size      string
-	PaintId   int
-	PaperId   int
-	TextileId int
+	Id            string
+	Size          string
+	PaintId       int
+	PaperId       int
+	TextileId     int
+	PaintVolume   float64
+	PaperVolume   float64
+	TextileVolume float64
 }
 
 type Paint struct {
@@ -16,14 +26,15 @@ type Paint struct {
 }
 
 type Paper struct {
-	Id   int
-	Type string
-	Size string
+	Id     int
+	Type   string
+	Volume float64
 }
 
 type Textile struct {
-	Id   int
-	Type string
+	Id     int
+	Type   string
+	Volume float64
 }
 
 type Printer struct {

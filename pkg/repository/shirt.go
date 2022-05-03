@@ -24,8 +24,8 @@ func NewShirtSQLite(db *sqlx.DB) *ShirtSQLite {
 
 func (r *ShirtSQLite) CreateShirt(shirt app.Shirt) (int, error) {
 	var id int
-	query := fmt.Sprintf("insert into %s (size, paint_id, paper_id, textile_id) values ($1, $2, $3, $4) returning id", shirtsTable)
-	row := r.db.QueryRow(query, shirt.Size, shirt.PaintId, shirt.PaperId, shirt.TextileId)
+	query := fmt.Sprintf("insert into %s (size, paint_id, paper_id, textile_id, paint_volume, paper_volume, textile_volume) values ($1, $2, $3, $4, $5, $6, $7) returning id", shirtsTable)
+	row := r.db.QueryRow(query, shirt.Size, shirt.PaintId, shirt.PaperId, shirt.TextileId, shirt.PaintVolume, shirt.PaperVolume, shirt.TextileVolume)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
@@ -34,7 +34,7 @@ func (r *ShirtSQLite) CreateShirt(shirt app.Shirt) (int, error) {
 
 func (r *ShirtSQLite) GetShirtById(id int) (app.Shirt, error) {
 	var shirt app.Shirt
-	query := fmt.Sprintf("select id, size, paint_id, paper_id, textile_id FROM %s WHERE id = $1", shirtsTable)
+	query := fmt.Sprintf("select id, size, paint_id, paper_id, textile_id, paint_volume, paper_volume, textile_volume FROM %s WHERE id = $1", shirtsTable)
 	if err := r.db.Get(&shirt, query, id); err != nil {
 		return shirt, err
 	}
@@ -43,7 +43,7 @@ func (r *ShirtSQLite) GetShirtById(id int) (app.Shirt, error) {
 
 func (r *ShirtSQLite) GetAllShirts() ([]app.Shirt, error) {
 	var shirts []app.Shirt
-	query := fmt.Sprintf("select id, size, paint_id, paper_id, textile_id FROM %s", shirtsTable)
+	query := fmt.Sprintf("select id, size, paint_id, paper_id, textile_id, paint_volume, paper_volume, textile_volume FROM %s", shirtsTable)
 	if err := r.db.Select(&shirts, query); err != nil {
 		return nil, err
 	}
@@ -51,8 +51,8 @@ func (r *ShirtSQLite) GetAllShirts() ([]app.Shirt, error) {
 }
 
 func (r *ShirtSQLite) UpdateShirt(id int, shirt app.Shirt) error {
-	query := fmt.Sprintf("update %s set size = $1, paint_id = $2, paper_id = $3, textile_id = $4 where id = $5", shirtsTable)
-	_, err := r.db.Exec(query, shirt.Size, shirt.PaintId, shirt.PaperId, shirt.TextileId, id)
+	query := fmt.Sprintf("update %s set size = $1, paint_id = $2, paper_id = $3, textile_id = $4, paint_volume = $4, paper_volume = $5, textile_volume = $6 where id = $7", shirtsTable)
+	_, err := r.db.Exec(query, shirt.Size, shirt.PaintId, shirt.PaperId, shirt.TextileId, shirt.PaintVolume, shirt.PaperVolume, shirt.TextileVolume, id)
 	return err
 }
 

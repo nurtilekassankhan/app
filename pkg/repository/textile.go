@@ -24,8 +24,8 @@ func NewTextileSQLite(db *sqlx.DB) *TextileSQLite {
 
 func (r *TextileSQLite) CreateTextile(textile app.Textile) (int, error) {
 	var id int
-	query := fmt.Sprintf("insert into %s (type) values ($1) returning id", textilesTable)
-	row := r.db.QueryRow(query, textile.Type)
+	query := fmt.Sprintf("insert into %s (type, volume) values ($1, $2) returning id", textilesTable)
+	row := r.db.QueryRow(query, textile.Type, textile.Volume)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
@@ -34,7 +34,7 @@ func (r *TextileSQLite) CreateTextile(textile app.Textile) (int, error) {
 
 func (r *TextileSQLite) GetTextileById(id int) (app.Textile, error) {
 	var textile app.Textile
-	query := fmt.Sprintf("select id, type FROM %s WHERE id = $1", textilesTable)
+	query := fmt.Sprintf("select id, type, volume FROM %s WHERE id = $1", textilesTable)
 	if err := r.db.Get(&textile, query, id); err != nil {
 		return textile, err
 	}
@@ -43,7 +43,7 @@ func (r *TextileSQLite) GetTextileById(id int) (app.Textile, error) {
 
 func (r *TextileSQLite) GetAllTextiles() ([]app.Textile, error) {
 	var textiles []app.Textile
-	query := fmt.Sprintf("select id, type FROM %s", textilesTable)
+	query := fmt.Sprintf("select id, type, volume FROM %s", textilesTable)
 	if err := r.db.Select(&textiles, query); err != nil {
 		return nil, err
 	}
@@ -51,8 +51,8 @@ func (r *TextileSQLite) GetAllTextiles() ([]app.Textile, error) {
 }
 
 func (r *TextileSQLite) UpdateTextile(id int, textile app.Textile) error {
-	query := fmt.Sprintf("update %s set type = $1 where id = $2", textilesTable)
-	_, err := r.db.Exec(query, textile.Type, id)
+	query := fmt.Sprintf("update %s set type = $1, volume = $2 where id = $3", textilesTable)
+	_, err := r.db.Exec(query, textile.Type, textile.Volume, id)
 	return err
 }
 

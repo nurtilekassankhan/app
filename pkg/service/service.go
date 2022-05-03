@@ -8,6 +8,7 @@ type Service struct {
 	Paper
 	Paint
 	Shirt
+	Order
 }
 
 func NewService(repos *repository.Repository) *Service {
@@ -17,5 +18,6 @@ func NewService(repos *repository.Repository) *Service {
 		Paper:   NewPaperService(repos.Paper),
 		Paint:   NewPaintService(repos.Paint),
 		Shirt:   NewShirtService(repos.Shirt),
+		Order:   NewOrderService(repos.Order),
 	}
 }

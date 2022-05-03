@@ -60,5 +60,14 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		shirts.PUT("/:id", h.updateShirt)
 		shirts.DELETE("/:id", h.deleteShirt)
 	}
+
+	orders := router.Group("/orders")
+	{
+		orders.POST("/", h.createOrder)
+		orders.GET("/", h.getAllOrders)
+		orders.POST("/:id", h.getOrderById)
+		orders.PUT("/:id", h.updateOrder)
+		orders.DELETE("/:id", h.deleteOrder)
+	}
 	return router
 }

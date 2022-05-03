@@ -8,6 +8,7 @@ type Repository struct {
 	Paper
 	Paint
 	Shirt
+	Order
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
@@ -17,5 +18,6 @@ func NewRepository(db *sqlx.DB) *Repository {
 		Paper:   NewPaperSQLite(db),
 		Paint:   NewPaintSQLite(db),
 		Shirt:   NewShirtSQLite(db),
+		Order:   NewOrderSQLite(db),
 	}
 }
