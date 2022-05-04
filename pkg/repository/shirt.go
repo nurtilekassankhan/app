@@ -24,6 +24,7 @@ func NewShirtSQLite(db *sqlx.DB) *ShirtSQLite {
 
 func (r *ShirtSQLite) CreateShirt(shirt app.Shirt) (int, error) {
 	var id int
+	fmt.Println(shirt)
 	query := fmt.Sprintf("insert into %s (size, paint_id, paper_id, textile_id, paint_volume, paper_volume, textile_volume) values ($1, $2, $3, $4, $5, $6, $7) returning id", shirtsTable)
 	row := r.db.QueryRow(query, shirt.Size, shirt.PaintId, shirt.PaperId, shirt.TextileId, shirt.PaintVolume, shirt.PaperVolume, shirt.TextileVolume)
 	if err := row.Scan(&id); err != nil {
@@ -51,7 +52,7 @@ func (r *ShirtSQLite) GetAllShirts() ([]app.Shirt, error) {
 }
 
 func (r *ShirtSQLite) UpdateShirt(id int, shirt app.Shirt) error {
-	query := fmt.Sprintf("update %s set size = $1, paint_id = $2, paper_id = $3, textile_id = $4, paint_volume = $4, paper_volume = $5, textile_volume = $6 where id = $7", shirtsTable)
+	query := fmt.Sprintf("update %s set size = $1, paint_id = $2, paper_id = $3, textile_id = $4, paint_volume = $5, paper_volume = $6, textile_volume = $7 where id = $8", shirtsTable)
 	_, err := r.db.Exec(query, shirt.Size, shirt.PaintId, shirt.PaperId, shirt.TextileId, shirt.PaintVolume, shirt.PaperVolume, shirt.TextileVolume, id)
 	return err
 }

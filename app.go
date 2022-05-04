@@ -18,19 +18,19 @@ type RequiredResources struct {
 type Order struct {
 	Id      int
 	Status  string
-	ShirtId int
+	ShirtId int `db:"shirt_id" json:"shirt_id"`
 	Amount  float64
 }
 
 type Shirt struct {
 	Id            string
 	Size          string
-	PaintId       int
-	PaperId       int
-	TextileId     int
-	PaintVolume   float64
-	PaperVolume   float64
-	TextileVolume float64
+	PaintId       int     `db:"paint_id" json:"paint_id"`
+	PaperId       int     `db:"paper_id" json:"paper_id"`
+	TextileId     int     `db:"textile_id" json:"textile_id"`
+	PaintVolume   float64 `db:"paint_volume" json:"paint_volume"`
+	PaperVolume   float64 `db:"paper_volume" json:"paper_volume"`
+	TextileVolume float64 `db:"textile_volume" json:"textile_volume"`
 }
 
 type Paint struct {

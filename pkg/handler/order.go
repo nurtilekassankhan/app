@@ -25,7 +25,7 @@ func (h *Handler) createOrder(c *gin.Context) {
 		return
 	}
 	//todo: перенести на получение свободного принтера
-	printer, err := h.services.GetPrinterById(1)
+	printer, err := h.services.GetPrinterById(4)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -62,8 +62,8 @@ func (h *Handler) createOrder(c *gin.Context) {
 			return
 		}
 		c.JSON(http.StatusOK, map[string]interface{}{
-			"id":            id,
-			"required_time": reqResources.SpentTime,
+			"id":                 id,
+			"required_time_hour": reqResources.SpentTime.Hours(),
 		})
 	} else {
 		newErrorResponse(c, http.StatusInternalServerError, "insufficient resources to execute order") //todo: вынести ошибку в константу
