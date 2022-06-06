@@ -3,6 +3,8 @@ package handler
 import (
 	"app/pkg/service"
 	"github.com/gin-gonic/gin"
+	"html/template"
+	"strings"
 )
 
 type Handler struct {
@@ -15,6 +17,17 @@ func NewHandler(services *service.Service) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
+	router.SetFuncMap(template.FuncMap{
+		"upper": strings.ToUpper,
+	})
+	router.Static("/assets", "./ui/assets")
+	router.LoadHTMLGlob("./ui/html/*.html")
+
+	app := router.Group("/app")
+	{
+		app.GET("/dashboard", h.dashboard)
+		app.GET("/tables", h.tables)
+	}
 
 	printers := router.Group("/printers")
 	{
@@ -54,20 +67,20 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	shirts := router.Group("/shirts")
 	{
-		shirts.POST("/", h.createShirt)      //
-		shirts.GET("/", h.getAllShirts)      //
-		shirts.GET("/:id", h.getShirtById)   //
-		shirts.PUT("/:id", h.updateShirt)    //
-		shirts.DELETE("/:id", h.deleteShirt) //
+		shirts.POST("/", h.createShirt)      //pass
+		shirts.GET("/", h.getAllShirts)      //pass
+		shirts.GET("/:id", h.getShirtById)   //pass
+		shirts.PUT("/:id", h.updateShirt)    //pass
+		shirts.DELETE("/:id", h.deleteShirt) //pass
 	}
 
 	orders := router.Group("/orders")
 	{
-		orders.POST("/", h.createOrder)      //
-		orders.GET("/", h.getAllOrders)      //
-		orders.GET("/:id", h.getOrderById)   //
-		orders.PUT("/:id", h.updateOrder)    //
-		orders.DELETE("/:id", h.deleteOrder) //
+		orders.POST("/", h.createOrder)      //pass
+		orders.GET("/", h.getAllOrders)      //pass
+		orders.GET("/:id", h.getOrderById)   //pass
+		orders.PUT("/:id", h.updateOrder)    //pass
+		orders.DELETE("/:id", h.deleteOrder) //pass
 	}
 	return router
 }
